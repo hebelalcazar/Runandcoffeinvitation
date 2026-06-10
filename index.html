@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Salimos por un café? ☕</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #fdf6ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: #4a3728;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(111, 78, 55, 0.15);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #6f4e37;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .emoji {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            height: 50px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-yes {
+            background-color: #d4a373;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+            background-color: #bc8a5f;
+        }
+
+        .btn-no {
+            background-color: #e63946;
+            color: white;
+            position: absolute;
+            right: 40px;
+        }
+
+        /* Opciones de planes */
+        .hidden {
+            display: none !important;
+        }
+
+        .plan-option {
+            background: #fefae0;
+            border: 2px solid #ccd5ae;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .plan-option:hover {
+            background: #e2ebd5;
+            transform: translateY(-2px);
+        }
+
+        .plan-option h3 {
+            font-size: 16px;
+            color: #6f4e37;
+            margin-bottom: 5px;
+        }
+
+        .plan-option p {
+            font-size: 14px;
+            margin-bottom: 0;
+            color: #606c38;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="screen1" class="card">
+        <div class="emoji">🏃‍♀️☕</div>
+        <h1>¡Hola! Tengo una pregunta...</h1>
+        <p>Sé que te encanta correr y que un buen café nunca se rechaza. Así que pensé... ¿Te gustaría salir conmigo a tomar uno?</p>
+        <div class="btn-container">
+            <button class="btn-yes" onclick="nextScreen()">¡Sí, de una! 🎉</button>
+            <button class="btn-no" id="btnNo" onmouseover="moveButton()" onclick="moveButton()">No 😢</button>
+        </div>
+    </div>
+
+    <div id="screen2" class="card hidden">
+        <div class="emoji">✨🗺️</div>
+        <h1>¡Buenísimo! Te va a encantar</h1>
+        <p>Ahora te toca la parte difícil... Elige tu propia aventura:</p>
+        
+        <div class="plan-option" onclick="selectPlan('Ruta + Recompensa')">
+            <h3>🏃‍♂️☕ Opción A: Ruta + Recompensa</h3>
+            <p>Un trote suave por una ruta linda y terminamos en una cafetería top para recuperar energías.</p>
+        </div>
+
+        <div class="plan-option" onclick="selectPlan('Solo Café (Modo tranqui)')">
+            <h3>🥐☕ Opción B: Modo Post-Entreno (Sin sudar)</h3>
+            <p>Cero kilómetros acumulados. Solo buen café de especialidad, un postrecito y una buena charla.</p>
+        </div>
+
+        <div class="plan-option" onclick="selectPlan('Cata de Café')">
+            <h3>🔬☕ Opción C: Modo Coffee Geek</h3>
+            <p>Ir a un lugar especializado a probar un método de filtrado diferente (V60, Chemex) que seguro te va a gustar.</p>
+        </div>
+    </div>
+
+    <div id="screen3" class="card hidden">
+        <div class="emoji">📅✍️</div>
+        <h1>¡Planazo agendado!</h1>
+        <p id="finalMessage"></p>
+        <p>¡Te escribo por WhatsApp para coordinar el día y la hora! 🚀</p>
+    </div>
+
+    <script>
+        // Función para mover el botón "No" cuando pasa el mouse por encima
+        function moveButton() {
+            const btnNo = document.getElementById('btnNo');
+            // Genera posiciones aleatorias dentro de la pantalla
+            const x = Math.random() * (window.innerWidth - btnNo.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - btnNo.offsetHeight - 50);
+            
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = x + 'px';
+            btnNo.style.top = y + 'px';
+        }
+
+        // Pasar a la pantalla de selección de planes
+        function nextScreen() {
+            document.getElementById('screen1').classList.add('hidden');
+            document.getElementById('screen2').classList.remove('hidden');
+        }
+
+        // Guardar el plan y mostrar pantalla final
+        function selectPlan(planName) {
+            document.getElementById('screen2').classList.add('hidden');
+            document.getElementById('screen3').classList.remove('hidden');
+            
+            document.getElementById('finalMessage').innerHTML = `Elegiste: <strong>"${planName}"</strong>. Ya lo tengo anotado.`;
+            
+            // TIP OPCIONAL: Aquí se podría integrar un envío de mensaje automático, 
+            // pero lo dejamos simple para que le avises tú mismo.
+        }
+    </script>
+</body>
+</html>
